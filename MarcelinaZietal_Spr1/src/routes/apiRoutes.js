@@ -4,6 +4,8 @@ const router = express.Router();
 const computersController = require('../controllers/computersController');
 const laptopsController = require('../controllers/laptopsController');
 const userController = require('../controllers/usersController');
+const Computer = require('../models/computers');
+const Laptop = require('../models/laptops');
 
 // żądania z użytkownikami
 router.post('/login', (req,res) => userController.login(req,res))
@@ -17,23 +19,252 @@ router.post('/deleteuser/:id',  (req,res) => userController.deleteUser(req,res))
 router.post('/changeprivileges/:id',  (req,res) => userController.changePrivileges(req,res))
 
 // żądania z komputerami
-router.get('/computers', (req,res) => computersController.getAllComputers(req,res))
-router.get('/computers/edit/:id',  (req,res) => computersController.editComputer(req,res))
-router.post('/computers/save/:id',  (req,res) => computersController.updateComputerAndShowAll(req,res))
-router.get('/computers/delete/:id',  (req,res) => computersController.deleteComputerAndShowAll(req,res))
-router.get('/computers/:id', (req,res) => computersController.getComputerById(req,res))
-router.post('/computer',  (req,res) => computersController.createComputer(req,res))
-router.put('/computers/:id',  (req,res) => computersController.updateComputer(req,res))
-router.delete('/computers/:id',  (req,res) => computersController.deleteComputer(req,res))
+// Get all computers
+router.get('/computers', async (req, res) => {
+    try {
+        const computers = await Computer.find();
+        res.json(computers);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get computer by ID
+router.get('/computers/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const computer = await Computer.findById(id);
+        if (!computer) {
+            return res.status(404).json({ message: "Computer not found" });
+        }
+        res.json(computer);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Create a new computer
+router.post('/computers', async (req, res) => {
+    try {
+        const {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        } = req.body;
+
+        const computer = new Computer({
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        });
+
+        await computer.save();
+        res.status(201).json(computer);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Update a computer by ID
+router.put('/computers/:id', async (req, res) => {
+    try {
+        const {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        } = req.body;
+
+        const { id } = req.params;
+
+        const updatedComputer = await Computer.findByIdAndUpdate(id, {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        }, { new: true });
+
+        if (!updatedComputer) {
+            return res.status(404).json({ message: "Computer not found" });
+        }
+
+        res.json(updatedComputer);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Delete a computer by ID
+router.delete('/computers/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedComputer = await Computer.findByIdAndDelete(id);
+
+        if (!deletedComputer) {
+            return res.status(404).json({ message: "Computer not found" });
+        }
+
+        res.json({ message: "Computer deleted" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 // żądania z laptopami
-router.get('/laptops', (req,res) => laptopsController.getAllLaptops(req,res))
-router.get('/laptops/edit/:id',  (req,res) => laptopsController.editLaptop(req,res))
-router.post('/laptops/save/:id',  (req,res) => laptopsController.updateLaptopAndShowAll(req,res))
-router.get('/laptops/delete/:id',  (req,res) => laptopsController.deleteLaptopAndShowAll(req,res))
-router.get('/laptops/:id', (req,res) => laptopsController.getLaptopById(req,res))
-router.post('/laptop',  (req,res) => laptopsController.createLaptop(req,res))
-router.put('/laptops/:id',  (req,res) => laptopsController.updateLaptop(req,res))
-router.delete('/laptops/:id',  (req,res) => laptopsController.deleteLaptop(req,res))
+// Get all laptops
+router.get('/laptops', async (req, res) => {
+    try {
+        const laptops = await Laptop.find();
+        res.json({ 
+            laptops,
+            isLoggedIn: req.session.isLoggedIn,
+            isAdmin: req.session.isAdmin
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get a single laptop by ID
+router.get('/laptops/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const laptop = await Laptop.findById(id);
+        if (!laptop) {
+            return res.status(404).json({ message: "Laptop not found" });
+        }
+        res.json(laptop);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Create a new laptop
+router.post('/laptops', async (req, res) => {
+    try {
+        const {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            graphics_memory,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        } = req.body;
+
+        const laptop = await Laptop.create({
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            graphics_memory,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        });
+
+        res.status(201).json(laptop);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Update a laptop by ID
+router.put('/laptops/:id', async (req, res) => {
+    try {
+        const {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            graphics_memory,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        } = req.body;
+
+        const laptopId = req.params.id;
+
+        const updatedLaptop = await Laptop.findByIdAndUpdate(laptopId, {
+            imgUrl,
+            name,
+            price,
+            processor,
+            ram,
+            graphics_memory,
+            operating_system,
+            height,
+            width,
+            depth,
+            weight,
+            included_accessories
+        }, { new: true });
+
+        if (!updatedLaptop) {
+            return res.status(404).json({ message: "Laptop not found" });
+        }
+
+        res.json(updatedLaptop);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Delete a laptop by ID
+router.delete('/laptops/:id', async (req, res) => {
+    try {
+        const laptopId = req.params.id;
+        const deletedLaptop = await Laptop.findByIdAndDelete(laptopId);
+        if (!deletedLaptop) {
+            return res.status(404).json({ message: "Laptop not found" });
+        }
+        res.json({ message: "Laptop deleted successfully" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 module.exports = router;
