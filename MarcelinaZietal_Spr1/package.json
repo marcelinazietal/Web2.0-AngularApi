@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon -r dotenv/config --watch src src/bin/start"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
