@@ -1,22 +1,7 @@
 const express = require('express');
-const JWT = require('jwt-async');
 const router = express.Router();
-const computersController = require('../controllers/computersController');
-const laptopsController = require('../controllers/laptopsController');
-const userController = require('../controllers/usersController');
 const Computer = require('../models/computers');
 const Laptop = require('../models/laptops');
-
-// żądania z użytkownikami
-router.post('/login', (req,res) => userController.login(req,res))
-router.get('/logout', (req,res) => userController.logout(req,res))
-router.post('/register', (req,res) => userController.createUser(req,res))
-router.get('/activate/:token', (req,res) => userController.activateUser(req,res))
-router.post('/changepassword', (req,res) => userController.changepassword(req,res))
-router.get('/users',  (req,res) => userController.adminPanel(req,res))
-router.post('/createuser',  (req,res) => userController.createUserByAdmin(req,res))
-router.post('/deleteuser/:id',  (req,res) => userController.deleteUser(req,res))
-router.post('/changeprivileges/:id',  (req,res) => userController.changePrivileges(req,res))
 
 // żądania z komputerami
 // Get all computers
@@ -146,9 +131,7 @@ router.get('/laptops', async (req, res) => {
     try {
         const laptops = await Laptop.find();
         res.json({ 
-            laptops,
-            isLoggedIn: req.session.isLoggedIn,
-            isAdmin: req.session.isAdmin
+            laptops
         });
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -4,14 +4,11 @@ const httpErrors = require('http-errors');
 const logger = require('morgan');
 const path = require('path');
 const db = require('./utils/db')
-const expressJWT = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const session = require('express-session');
 
 const apiRoutes = require('./routes/apiRoutes');
 const viewsRoutes = require('./routes/viewsRoutes');
-// Testy jwt
-const jwt = require('./routes/jwt');
 
 const app = express();
 
@@ -35,9 +32,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', apiRoutes);
 app.use('/', viewsRoutes);
-// Testy jwt
-app.use('/jwt', jwt);
-
-// app.use(expressJWT({ secret: "secret" }).unless({ path: ['/', '/login', '/getstudents', '/loggers'] }));
 
 module.exports = app;

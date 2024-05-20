@@ -3,7 +3,6 @@ const router = express.Router();
 const indexController = require('../controllers/indexController')
 const computersController = require('../controllers/computersController');
 const laptopsController = require('../controllers/laptopsController');
-const userController = require('../controllers/usersController');
 
 // żądania z userami
 router.get('', (req,res) => indexController.mainPage(req,res))

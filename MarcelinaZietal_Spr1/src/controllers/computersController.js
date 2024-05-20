@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Computer = require('../models/computers');
-const middleware = require("../middleware/middleware");
 
 // Get all computers
 router.get('/computers', async (req, res) => {

@@ -1,24 +1,15 @@
 const express = require('express');
 const Laptop = require('../models/laptops');
-const middleware = require("../middleware/middleware");
 
 const router = express.Router();
 
-// Middleware to check login and admin status
-const checkSession = async (req, res, next) => {
-    req.session.isLoggedIn = await middleware.isLoggedIn(req);
-    req.session.isAdmin = await middleware.isAdmin(req);
-    next();
-};
 
 // Get all laptops
-router.get('/laptops', checkSession, async (req, res) => {
+router.get('/laptops', async (req, res) => {
     try {
         const laptops = await Laptop.find();
         res.json({ 
-            laptops,
-            isLoggedIn: req.session.isLoggedIn,
-            isAdmin: req.session.isAdmin
+            laptops
         });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -40,7 +31,7 @@ router.get('/laptops/:id', async (req, res) => {
 });
 
 // Create a new laptop
-router.post('/laptops', checkSession, async (req, res) => {
+router.post('/laptops', async (req, res) => {
     try {
         const {
             imgUrl,
@@ -79,7 +70,7 @@ router.post('/laptops', checkSession, async (req, res) => {
 });
 
 // Update a laptop by ID
-router.put('/laptops/:id', checkSession, async (req, res) => {
+router.put('/laptops/:id', async (req, res) => {
     try {
         const {
             imgUrl,
@@ -124,7 +115,7 @@ router.put('/laptops/:id', checkSession, async (req, res) => {
 });
 
 // Delete a laptop by ID
-router.delete('/laptops/:id', checkSession, async (req, res) => {
+router.delete('/laptops/:id', async (req, res) => {
     try {
         const laptopId = req.params.id;
         const deletedLaptop = await Laptop.findByIdAndDelete(laptopId);
