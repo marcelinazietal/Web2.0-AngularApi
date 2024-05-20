@@ -1,0 +1,31 @@
+doctype html
+html
+  include templates/head.pug
+  body
+    include templates/menu.pug
+    .container.mt-4
+      if computers && computers.length > 0
+        - var productsInRow = 0
+        .row
+          each computer, index in computers
+            if productsInRow === 3
+              .row
+              - productsInRow = 0
+            .col-md-4
+              .product-card
+                img(src=computer.imgUrl, alt=computer.name, width="200", height="200")
+                h3(style="font-size: 1rem;")= computer.name
+                p(style="font-size: 0.8rem;") Cena: $#{computer.price}
+                a.btn.btn-primary(href=`/api/computers/${computer.id}`) Kup teraz
+                if isAdmin
+                  a.btn.btn-danger(href=`/api/computers/delete/${computer.id}`) Usuń
+                  a.btn.btn-warning(href=`/api/computers/edit/${computer.id}`) Edytuj
+            - productsInRow++
+      else
+        .text-center(display="flex", justify-content="center", align-items="center", height="80vh")
+          h1(display="inline-block", style="font-size: 3rem;") Brak danych do wyświetlenia
+
+      if isAdmin
+        .row
+          .col-md-12.text-center
+            a.btn.btn-success(href="/addcomputer") Dodaj komputer

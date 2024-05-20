@@ -1,0 +1,54 @@
+doctype html
+html
+  include templates/head.pug
+  body
+    include templates/menu.pug
+
+    .container
+      h2 Dodaj komputer
+      form(action="/api/computer", method="POST")
+        .form-group
+          label(for="imgUrl") Link do zdjęcia
+          input.form-control(type="text", id="imgUrl", name="imgUrl")
+
+        .form-group
+          label(for="name") Nazwa
+          input.form-control(type="text", id="name", name="name")
+
+        .form-group
+          label(for="price") Cena
+          input.form-control(type="text", id="price", name="price")
+
+        .form-group
+          label(for="processor") Procesor
+          input.form-control(type="text", id="processor", name="processor")
+        
+        .form-group
+          label(for="ram") RAM
+          input.form-control(type="text", id="ram", name="ram")
+        
+        .form-group
+          label(for="operating_system") System operacyjny
+          input.form-control(type="text", id="operating_system", name="operating_system")
+
+        .form-group
+          label(for="height") Wysokość
+          input.form-control(type="text", id="height", name="height")
+
+        .form-group
+          label(for="width") Szerokość
+          input.form-control(type="text", id="width", name="width")
+
+        .form-group
+          label(for="depth") Głębokość
+          input.form-control(type="text", id="depth", name="depth")
+
+        .form-group
+          label(for="weight") Waga
+          input.form-control(type="text", id="weight", name="weight")
+
+        .form-group
+          label(for="included_accessories") Dodatkowe akcesoria
+          input.form-control(type="text", id="included_accessories", name="included_accessories")
+
+        button.btn.btn-primary(type="submit") Dodaj

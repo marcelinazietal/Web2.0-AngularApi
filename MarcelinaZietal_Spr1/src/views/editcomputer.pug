@@ -1,0 +1,54 @@
+doctype html
+html
+  include templates/head.pug
+  body
+    include templates/menu.pug
+
+    .container
+      h2 Edytuj komputer
+      form(action=`/api/computers/save/${computer._id}`, method="POST")
+        .form-group
+          label(for="imgUrl") Link do zdjęcia
+          input.form-control(type="text", id="imgUrl", name="imgUrl", value=computer.imgUrl)
+
+        .form-group
+          label(for="name") Nazwa
+          input.form-control(type="text", id="name", name="name", value=computer.name)
+
+        .form-group
+          label(for="price") Cena
+          input.form-control(type="text", id="price", name="price", value=computer.price)
+
+        .form-group
+          label(for="processor") Procesor
+          input.form-control(type="text", id="processor", name="processor", value=computer.processor)
+        
+        .form-group
+          label(for="ram") RAM
+          input.form-control(type="text", id="ram", name="ram", value=computer.ram)
+        
+        .form-group
+          label(for="operating_system") System operacyjny
+          input.form-control(type="text", id="operating_system", name="operating_system", value=computer.operating_system)
+
+        .form-group
+          label(for="height") Wysokość
+          input.form-control(type="text", id="height", name="height", value=computer.height)
+
+        .form-group
+          label(for="width") Szerokość
+          input.form-control(type="text", id="width", name="width", value=computer.width)
+
+        .form-group
+          label(for="depth") Głębokość
+          input.form-control(type="text", id="depth", name="depth", value=computer.depth)
+
+        .form-group
+          label(for="weight") Waga
+          input.form-control(type="text", id="weight", name="weight", value=computer.weight)
+
+        .form-group
+          label(for="included_accessories") Dodatkowe akcesoria
+          input.form-control(type="text", id="included_accessories", name="included_accessories", value=computer.included_accessories)
+
+        button.btn.btn-primary(type="submit") Zapisz

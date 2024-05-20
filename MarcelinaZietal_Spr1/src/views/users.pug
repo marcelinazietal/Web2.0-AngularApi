@@ -1,0 +1,60 @@
+doctype html
+html
+  include templates/head.pug
+  body
+    include templates/menu.pug
+    | Strony dostępne dla <b>wszystkich</b><br>
+    | <a href="/">Strona główna</a><br>
+    | <a href="/login">Strona logowania</a><br>
+    | <a href="/register">Strona rejestracji</a><br>
+    | <a href="/api/computers">Komputery</a> - lista dostępnych na stronie komputerów<br>
+    | <a href="/api/laptops">Laptopy</a> - lista dostępnych na stronie laptopów<br><br>
+
+    | Strony dostępne dla <b>tylko dla zalogowanych</b><br>
+    | <a href="/api/logout">Wyloguj</a> - po wylogowaniu automatycznie włącza się strona główna<br><br>
+
+    | Strony dostępne dla <b>tylko dla administratora</b><br>
+    | <a href="/users">Użytkownicy</a> - aktualna strona<br>
+    | <a href="/addcomputer">Dodanie komputera</a><br>
+    | <a href="/addlaptop">Dodanie laptopa</a><br>
+    | Administrator posiada również możliwość edycji. Przykładowa strona nie została podana ponieważ w linku musi znajdować się id istniejącego obiektu.<br>
+
+    <hr>
+    | Zalogowany: #{username}<br>
+    
+    <hr>
+    | <h3>Dodawanie nowego użytkownika</h3>
+    form(action="/api/createuser", method="POST")
+      div.form-group
+        label(for="username") Nazwa użytkownika:
+        input#username.form-control(type="text", name="username", placeholder="Wprowadź nazwę użytkownika", required)
+      div.form-group
+        label(for="email") Adres email:
+        input#email.form-control(type="email", name="email", placeholder="Wprowadź adres email", required)
+      div.form-group
+        label(for="password") Hasło:
+        input#password.form-control(type="password", name="password", placeholder="Wprowadź hasło", required)
+      div.form-group.form-check
+          input#activateUserCheckbox.form-check-input(type="checkbox", name="activateUser", value="true")
+          label.form-check-label(for="activateUserCheckbox") Czy aktywować - na adres mailowy nie zostanie wysłany link aktywujący konto 
+      button.btn.btn-primary(type="submit") Zarejestruj się
+    <hr>
+    | <h3>Lista użytkowników aplikacji</h3>
+    table.table.table-bordered.table-striped
+      thead
+        tr
+          th Nazwa użytkownika
+          th Adres e-mail
+          th Uprawnienia administratora
+          th Akcje
+      tbody
+        each user in users
+          tr
+            td= user.username
+            td= user.email
+            td
+              form(action=`/api/changeprivileges/${user._id}`, method="POST")
+                button.btn.btn-link(type="submit")= user.role
+            td
+              form(action=`/api/deleteuser/${user._id}`, method="POST")
+                button.btn.btn-danger(type="submit") Usuń

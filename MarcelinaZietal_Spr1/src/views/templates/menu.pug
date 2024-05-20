@@ -1,0 +1,28 @@
+nav.navbar.navbar-expand-sm
+  .container
+    .navbar-brand
+      a.navbar-brand(href="/", aria-label="Strona główna")
+        img(src="/house.svg", alt="Strona główna", width="16px")
+
+    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+      span.navbar-toggler-icon
+
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.ml-auto
+        if isLoggedIn
+          li.nav-item
+            a.nav-link(href="/api/logout") Wyloguj się
+          li.nav-item
+            a.nav-link(href="/changepassword") Zmień hasło
+        else
+          li.nav-item
+            a.nav-link(href="/login") Zaloguj się
+          li.nav-item
+            a.nav-link(href="/register") Zarejestruj się
+        li.nav-item.active
+          a.nav-link(href="/api/computers") Komputery
+        li.nav-item
+          a.nav-link(href="/api/laptops") Laptopy
+        if isAdmin
+          li.nav-item
+            a.nav-link(href="/api/users") Użytkownicy

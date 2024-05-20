@@ -1,0 +1,23 @@
+doctype html
+html
+  include templates/head.pug
+  body
+    include templates/menu.pug
+    .container-fluid.mt-5
+      .row
+        .col
+          h1.text-center Kup swój komputer
+          p.text-center Znajdź sprzęt najelpiej pasujący do twoich potrzeb.
+    .container.mt-3
+      .row
+        .col.text-left
+          p Domyślnie stworzona jest para użytkowników:
+          ul
+            li Administrator
+              ul
+                li Login: admin@example.com
+                li Hasło: admin
+            li Użytkownik
+              ul
+                li Login: user@example.com
+                li Hasło: user
